@@ -1,4 +1,4 @@
-name: Build Tensura Slime
+name: Build Slime Evolution RPG (NeoForge 1.21.1)
 
 on:
   push:
@@ -11,19 +11,28 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
+
       - name: Set up Java 21
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '21'
+          cache: gradle
+
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.8'
+
       - name: Build mod
-        run: gradle build
-      - name: Upload mod jar
+        run: gradle --no-daemon build
+
+      - name: Upload mod JAR
         uses: actions/upload-artifact@v4
         with:
-          name: TensuraSlime-Forge-1.21.1
-          path: build/libs/*.jar
+          name: SlimeEvolutionRPG-NeoForge-1.21.1
+          path: |
+            build/libs/*.jar
+            !build/libs/*-sources.jar
+          if-no-files-found: error
+          retention-days: 14
